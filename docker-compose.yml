@@ -1,5 +1,20 @@
-rabbitmq:
-  image: rabbitmq:3-management
-  ports:
-    - "5672:5672"
-    - "15672:15672"
+version: '1'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  configserver:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      RABBITMQ_HOST: rabbitmq:5672
+    depends_on:
+      - rabbitmq

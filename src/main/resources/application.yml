@@ -17,23 +17,36 @@ logging:
     org.springframework.cloud: 'DEBUG'
     
 eureka:
+  password: password
+  client:
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@${EUREKA.HOST}/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 10
     statusPageUrlPath: /admin/info
     healthCheckUrlPath: /admin/health
 
 spring:
+  application:
+    name: configserver
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/spring-cloud-samples/config-repo
+          uri: https://github.com/mango-park/config-repo
           basedir: target/config
           default-label: main
+  rabbitmq:
+    host: ${RABBITMQ_HOST}  # RabbitMQ 호스트 주소
+    port: 5672  # RabbitMQ 포트 번호
+    username: guest  # RabbitMQ 사용자 이름
+    password: guest  # RabbitMQ 비밀번호
 
 ---
 spring:
-  profiles: cloud
+  config:
+    activate:
+      on-profile: cloud
 eureka:
   password: password
   instance:
